@@ -17,14 +17,14 @@ lines = sc.textFile("file:///SparkCourse/1800.csv")
 # parse data by calling parseLine function
 parsedLines = lines.map(parseLine)
 
-# filter to lines to exclude everything except lines with TMIN as type
+# filter to lines to exclude everything except lines with TMAX as type
 maxTemps = parsedLines.filter(lambda x: "TMAX" in x[1])
 
-# every line has type TMIN now, so we don't need that column anymore
+# every line has type TMAX now, so we don't need that column anymore
 # create new rdd with only station ID and temp as the two columns
 stationTemps = maxTemps.map(lambda x: (x[0], x[2]))
 
-# create rdd with only one line for each station ID that contains min temp recorded for that station
+# create rdd with only one line for each station ID that contains max temp recorded for that station
 maxTemps = stationTemps.reduceByKey(lambda x, y: max(x,y))
 
 # collect the results and print out, formatted to two decimals
